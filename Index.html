@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <title>Best Friend App</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <main class="wrap">
+    <h1>Best Friend App</h1>
+    <p class="muted">Ποιον έχεις να δεις περισσότερο + countdown για γιορτές/γενέθλια.</p>
+
+    <!-- LIST (main view) -->
+    <section class="card">
+      <h2>Οι φίλοι μου</h2>
+      <ul id="list"></ul>
+    </section>
+  </main>
+
+  <!-- Floating + button -->
+  <button id="openFormBtn" class="fab" aria-label="Προσθήκη φίλου">+</button>
+
+  <!-- Overlay + Modal form -->
+  <div id="overlay" class="overlay"></div>
+
+  <section id="formCard" class="card modal" aria-hidden="true">
+    <h2 id="formTitle">Προσθήκη φίλου</h2>
+
+    <div class="grid">
+      <label>
+        Όνομα
+        <input id="name" type="text" placeholder="π.χ. Φώτης" />
+      </label>
+
+      <label>
+        Γενέθλια (ημ/νία)
+        <input id="birthday" type="date" />
+        <div class="hint">Βάλε οποιοδήποτε έτος -- κρατάμε μόνο μέρα/μήνα.</div>
+      </label>
+
+      <label>
+        Γιορτή (ημ/νία)
+        <input id="nameday" type="date" />
+        <div class="hint">Και εδώ κρατάμε μόνο μέρα/μήνα.</div>
+      </label>
+
+      <label>
+        Τελευταία φορά που βρεθήκατε
+        <input id="lastMet" type="date" />
+      </label>
+    </div>
+
+    <div class="row">
+      <button id="saveBtn" class="primary">Αποθήκευση</button>
+      <button id="cancelBtn" class="secondary">Άκυρο</button>
+      <span class="spacer"></span>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
