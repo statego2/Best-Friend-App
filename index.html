@@ -7,30 +7,53 @@
     content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
   />
   <title>Best Friend App</title>
-
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <main class="wrap">
-    <h1>Best Friend App</h1>
-    <p class="muted">Ποιον έχεις να δεις περισσότερο + countdown για γιορτές/γενέθλια.</p>
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1>Best Friend App</h1>
+        <p class="muted">Ποιον έχεις να δεις / να μιλήσεις περισσότερο + countdown για γιορτές/γενέθλια.</p>
+      </div>
 
-    <!-- LIST (main view) -->
+      <div class="top-actions">
+        <button id="briefBtn" class="ghost">Brief</button>
+        <button id="backupBtn" class="ghost">Backup</button>
+      </div>
+    </header>
+
+    <!-- LISTS (main view) -->
     <section class="card">
-      <h2>Οι φίλοι μου</h2>
-      <ul id="list"></ul>
+      <h2>Core</h2>
+      <ul id="listCore"></ul>
+    </section>
+
+    <section class="card">
+      <h2>Casual</h2>
+      <ul id="listCasual"></ul>
     </section>
   </main>
 
   <!-- Floating + button -->
   <button id="openFormBtn" class="fab" aria-label="Προσθήκη φίλου">+</button>
 
-  <!-- Overlay + Modal form -->
-  <div id="overlay" class="overlay"></div>
+  <!-- Overlay -->
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
 
+  <!-- Modal: Add/Edit -->
   <section id="formCard" class="card modal" aria-hidden="true">
-    <h2 id="formTitle">Προσθήκη φίλου</h2>
+    <div class="modal-head">
+      <h2 id="formTitle">Προσθήκη φίλου</h2>
+      <button id="formCloseX" class="iconbtn secondary" aria-label="Κλείσιμο">✕</button>
+    </div>
+
+    <!-- Group tabs -->
+    <div class="segmented" role="tablist" aria-label="Κατηγορία">
+      <button type="button" class="seg-btn active" data-group="core">Core</button>
+      <button type="button" class="seg-btn" data-group="casual">Casual</button>
+    </div>
 
     <div class="grid">
       <label>
@@ -39,26 +62,104 @@
       </label>
 
       <label>
-        Γενέθλια (ημ/νία)
-        <input id="birthday" type="date" />
-        <div class="hint">Βάλε οποιοδήποτε έτος -- κρατάμε μόνο μέρα/μήνα.</div>
+        Επάγγελμα (optional)
+        <input id="job" type="text" placeholder="π.χ. Πωλητής / Δασκάλα / Dev" />
       </label>
 
       <label>
-        Γιορτή (ημ/νία)
-        <input id="nameday" type="date" />
-        <div class="hint">Και εδώ κρατάμε μόνο μέρα/μήνα.</div>
+        Source (optional)
+        <input id="source" type="text" placeholder="π.χ. Σχολείο / Δουλειά / Toastmasters" />
       </label>
+
+      <div class="mdrow">
+        <div class="mdlabel">Γενέθλια (μήνας/μέρα)</div>
+        <div class="mdgrid">
+          <label class="mini">
+            Μήνας
+            <select id="bMonth"></select>
+          </label>
+          <label class="mini">
+            Μέρα
+            <select id="bDay"></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="mdrow">
+        <div class="mdlabel">Γιορτή (μήνας/μέρα)</div>
+        <div class="mdgrid">
+          <label class="mini">
+            Μήνας
+            <select id="nMonth"></select>
+          </label>
+          <label class="mini">
+            Μέρα
+            <select id="nDay"></select>
+          </label>
+        </div>
+      </div>
 
       <label>
         Τελευταία φορά που βρεθήκατε
         <input id="lastMet" type="date" />
       </label>
+
+      <label>
+        Τελευταία φορά που μιλήσατε (optional)
+        <input id="lastTalked" type="date" />
+        <div class="hint">Άστο κενό αν δεν σε νοιάζει.</div>
+      </label>
     </div>
 
-    <div class="row">
+    <div class="modal-footer">
       <button id="saveBtn" class="primary">Αποθήκευση</button>
       <button id="cancelBtn" class="secondary">Άκυρο</button>
+      <span class="spacer"></span>
+    </div>
+  </section>
+
+  <!-- Modal: Brief -->
+  <section id="briefCard" class="card modal" aria-hidden="true">
+    <div class="modal-head">
+      <h2>Brief</h2>
+      <button id="briefCloseX" class="iconbtn secondary" aria-label="Κλείσιμο">✕</button>
+    </div>
+
+    <div id="briefBody" class="brief-body"></div>
+
+    <div class="modal-footer">
+      <button id="briefCloseBtn" class="secondary">Κλείσιμο</button>
+      <span class="spacer"></span>
+    </div>
+  </section>
+
+  <!-- Modal: Backup -->
+  <section id="backupCard" class="card modal" aria-hidden="true">
+    <div class="modal-head">
+      <h2>Backup</h2>
+      <button id="backupCloseX" class="iconbtn secondary" aria-label="Κλείσιμο">✕</button>
+    </div>
+
+    <div class="backup-body">
+      <p class="muted" style="margin-top:0;">
+        Export/Import των δεδομένων σου σε JSON. (Δεν κάνει sync -- είναι χειροκίνητο backup.)
+      </p>
+
+      <div class="row" style="margin-top: 10px;">
+        <button id="exportBtn" class="primary">Export JSON</button>
+        <label class="filebtn secondary">
+          Import JSON
+          <input id="importFile" type="file" accept="application/json,.json" />
+        </label>
+      </div>
+
+      <div class="hint" style="margin-top:10px;">
+        Import κάνει <b>replace</b> στα τωρινά δεδομένα.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button id="backupCloseBtn" class="secondary">Κλείσιμο</button>
       <span class="spacer"></span>
     </div>
   </section>
